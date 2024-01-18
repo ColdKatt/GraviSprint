@@ -3,11 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
+using Zenject;
 
 
-public class Obstacle : MonoBehaviour
+public abstract class Obstacle
 {
+    protected static RectTransform _obstaclePrefab;
 
+    [Inject]
+    private void Construct(RectTransform _prefab)
+    {
+        _obstaclePrefab = _prefab;
+    }
     /*
      * Two types of obstacles
      *      Vertical
@@ -19,16 +26,4 @@ public class Obstacle : MonoBehaviour
      * 
      * 
     */
-
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    private void FixedUpdate()
-    {
-        transform.Translate(Vector3.left * 2);
-    }
 }

@@ -5,16 +5,22 @@ using UnityEngine.UIElements;
 
 public class ObstacleSpawner : MonoBehaviour
 {
-    [SerializeField] private RectTransform _panel;
-    [SerializeField] private RectTransform _obstaclePrefab;
-    [SerializeField] private GameObject _parentObject;
-
     [SerializeField] private List<IObstacle> obstacles;
 
-    private IObstacle TestObstacle = new VerticalObstacle();
+    private void Awake()
+    {
+        obstacles = new List<IObstacle>();
+    }
+
+    private void Start()
+    {
+        obstacles.Add(new VerticalBottomObstacle());
+        obstacles.Add(new HorizontalObstacle());
+        obstacles.Add(new VerticalTopObstacle());
+    }
 
     public void Spawn()
     {
-        TestObstacle.Spawn();
+        obstacles[Random.Range(0, obstacles.Count)].Spawn();
     }
 }
