@@ -6,6 +6,6 @@ public class ObstacleMove : MonoBehaviour
 {
     private void FixedUpdate()
     {
-        transform.position += Vector3.left * GameRoot.ObstacleSpeed;
+        transform.position += Vector3.left * GameRoot.EnvironmentSpeed;
     }
 }

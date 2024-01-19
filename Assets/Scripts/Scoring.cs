@@ -8,24 +8,38 @@ public class Scoring : ITickable
 {
     private TMP_Text _scoreText;
     private static int s_score;
+    private static int s_highscore;
     private float _timelife;
 
     private int _multiplier = 10;
 
     public static int Score
-    { 
-        get 
-        { 
-            return s_score; 
-        } 
-        set 
+    {
+        get
+        {
+            return s_score;
+        }
+        set
         {
             s_score = value;
-            if (GameRoot.PlayerState is not Dead)
+            Highscore = value;
+            GameRoot.ReCalculateParameters();
+        }
+    }
+
+    public static int Highscore
+    {
+        get
+        {
+            return s_highscore;
+        }
+        set
+        {
+            if (value > Highscore)
             {
-                GameRoot.ReCalculateParameters();
+                s_highscore = value;
             }
-        } 
+        }
     }
 
     public void Tick()
@@ -40,9 +54,10 @@ public class Scoring : ITickable
 
     private void UpdateScore()
     {
-        if (GameRoot.PlayerState is Dead) return;
-
-        _timelife += Time.deltaTime;
+        if (GameRoot.PlayerState is Alive)
+        {
+            _timelife += Time.deltaTime; 
+        }
         Score = TimelifeToScore();
         _scoreText.text = Score.ToString();
         //_scoreText.text = 

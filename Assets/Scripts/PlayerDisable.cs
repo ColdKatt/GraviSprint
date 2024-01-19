@@ -4,15 +4,10 @@ using UnityEngine;
 
 public class PlayerDisable : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] private Player _player;
 
-    // Update is called once per frame
-    void Update()
+    public void Disable()
     {
-        
+        _player.gameObject.SetActive(false);
     }
 }

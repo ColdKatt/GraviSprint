@@ -43,5 +43,9 @@ public class Player : MonoBehaviour
         Debug.Log(collision.gameObject.name);
         _windowAnim.SetBool("IsDead", true);
         _playerAnim.SetBool("IsDead", true);
+        SoundManager.SoundHit();
+        TextSync.SyncCurrent(Scoring.Score.ToString());
+        TextSync.SyncHighscore(Scoring.Highscore.ToString());
+        SaveData.Save();
     }
 }

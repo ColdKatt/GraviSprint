@@ -18,7 +18,7 @@ public class EnvironmentMove : MonoBehaviour
 
     private void FixedUpdate()
     {
-        _backgroundObject.transform.Translate(Vector2.left * 2);
+        _backgroundObject.transform.Translate(Vector2.left * GameRoot.EnvironmentSpeed);
         if (_backgroundObject.transform.position.x < 0)
         {
             _backgroundObject.GetComponent<RectTransform>().position = _returnBackgroundPosition;

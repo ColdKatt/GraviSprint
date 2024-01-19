@@ -1,11 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class GameRoot : MonoBehaviour
 {
     private ObstacleSpawner _obstacleSpawner;
-    private static float s_obstacleSpeed;
+    private static float s_environmentSpeed;
     private static float s_obstacleRateSpawn;
 
     private static PlayerState _playerState = new Alive();
@@ -20,27 +22,20 @@ public class GameRoot : MonoBehaviour
         }
         set
         {
-            s_obstacleRateSpawn = Mathf.Clamp(value, 0.5f, 1.5f);
+            s_obstacleRateSpawn = Mathf.Clamp(value, 0.5f, 4.0f);
         }
     }
 
-    public static float ObstacleSpeed
+    public static float EnvironmentSpeed
     {
         get
         {
-            return s_obstacleSpeed;
+            return s_environmentSpeed;
         }
         set
         {
-            if (PlayerState is not Dead)
-            {
-                s_obstacleSpeed = Mathf.Clamp(value, 0.0f, 100.0f);
-                Debug.Log($"Changed to: {s_obstacleSpeed}");
-            }
-            else
-            {
-                s_obstacleRateSpawn = 0.0f;
-            }
+            s_environmentSpeed = Mathf.Clamp(value, 0.0f, 100.0f);
+            Debug.Log($"Changed to: {s_environmentSpeed}");
         }
     }
 
@@ -59,9 +54,11 @@ public class GameRoot : MonoBehaviour
 
     private void Awake()
     {
-        ObstacleSpeed = 1.0f;
-        ObstacleRateSpawn = 1.5f;
+        EnvironmentSpeed = 3.0f;
+        ObstacleRateSpawn = 3.0f;
         _obstacleSpawner = new ObstacleSpawner();
+
+        SaveData.Load();
 
         _spawnCoroutine ??= StartCoroutine(Spawn());
     }
@@ -75,26 +72,26 @@ public class GameRoot : MonoBehaviour
     {
         yield return new WaitForSeconds(1.0f); // Give the player a pause for looking
 
-        while (true) // Replace to GameRoot.State == State.Alive
+        while (PlayerState is Alive) // Replace to GameRoot.State == State.Alive
         {
             _obstacleSpawner.Spawn();
-
-
+            Debug.Log(ObstacleRateSpawn);
             yield return new WaitForSeconds(ObstacleRateSpawn);
         }
+        StopEnvironment();
     }
 
     public static void ReCalculateParameters()
     {
-        ObstacleSpeed = Scoring.Score / 100.0f;
-        ObstacleRateSpawn = 1.5f - (1.0f * (Scoring.Score / 500.0f));
+        EnvironmentSpeed = PlayerState is Alive ? Scoring.Score / 50.0f : 0.0f;
+
+        ObstacleRateSpawn = Scoring.Score > 100 ? 3.0f - (2.65f * (Scoring.Score / 650.0f)) : 4.0f;
     }
 
     public void StopEnvironment()
     {
         if (PlayerState is not Dead) return;
         Debug.Log("StopEnv");
-        ObstacleSpeed = 0.0f;
 
         if (_spawnCoroutine != null)
         {
