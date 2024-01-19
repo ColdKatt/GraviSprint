@@ -3,20 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class ObstacleSpawner : MonoBehaviour
+public class ObstacleSpawner
 {
-    [SerializeField] private List<IObstacle> obstacles;
+    private List<IObstacle> obstacles;
 
-    private void Awake()
+    public ObstacleSpawner() 
     {
-        obstacles = new List<IObstacle>();
-    }
-
-    private void Start()
-    {
-        obstacles.Add(new VerticalBottomObstacle());
-        obstacles.Add(new HorizontalObstacle());
-        obstacles.Add(new VerticalTopObstacle());
+        obstacles = new List<IObstacle>
+        {
+            new VerticalBottomObstacle(),
+            new HorizontalObstacle(),
+            new VerticalTopObstacle()
+        };
     }
 
     public void Spawn()

@@ -3,35 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerMovement : MonoBehaviour
+public class Player : MonoBehaviour
 {
-    private PlayerInput _input;
-
-    public GameObject _test;
-
+    [SerializeField] private Animator _windowAnim;
+    [SerializeField] private Animator _playerAnim;
     private Vector2 _roofDirection = Vector2.up;
 
-    private void Awake()
-    {
-        _input = new PlayerInput();
-
-        _input.Touch.Enable();
-    }
-
-    private void OnEnable()
-    {
-        _input.Touch.Teleport.started += OnTouchInput;
-    }
-
-    private void OnTouchInput(InputAction.CallbackContext context)
+    public void Teleport() // for button work
     {
         Reverse();
         LaunchRay();
-    }
-
-    private void OnDisable()
-    {
-        _input.Touch.Teleport.started -= OnTouchInput;
     }
 
     private void Reverse()
@@ -52,6 +33,15 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        if (collision.collider.TryGetComponent(out ObstacleMove o))
+        {
+            GameRoot.PlayerState.ChangeState(new Dead());
+        }
+
+        if (GameRoot.PlayerState is Alive) return;
+
         Debug.Log(collision.gameObject.name);
+        _windowAnim.SetBool("IsDead", true);
+        _playerAnim.SetBool("IsDead", true);
     }
 }
