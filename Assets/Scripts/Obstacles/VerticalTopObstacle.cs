@@ -7,8 +7,8 @@ public class VerticalTopObstacle : VerticalTopObstacleDependencies, IObstacle
 {
     public void Spawn()
     {
-        var obstacle = GameObject.Instantiate(_obstaclePrefab, _panel.transform);
-        var xPosition = Random.Range(_panel.rect.xMin, _panel.rect.xMax);
+        var obstacle = GameObject.Instantiate(s_obstaclePrefab, s_panel.transform);
+        var xPosition = Random.Range(s_panel.rect.xMin, s_panel.rect.xMax);
 
         obstacle.anchoredPosition = new Vector2(xPosition, 0);
     }

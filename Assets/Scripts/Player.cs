@@ -9,7 +9,7 @@ public class Player : MonoBehaviour
     [SerializeField] private Animator _playerAnim;
     private Vector2 _roofDirection = Vector2.up;
 
-    public void Teleport() // for button work
+    public void Teleport()
     {
         Reverse();
         LaunchRay();
@@ -40,12 +40,14 @@ public class Player : MonoBehaviour
 
         if (GameRoot.PlayerState is Alive) return;
 
-        Debug.Log(collision.gameObject.name);
         _windowAnim.SetBool("IsDead", true);
         _playerAnim.SetBool("IsDead", true);
+
         SoundManager.SoundHit();
+
         TextSync.SyncCurrent(Scoring.Score.ToString());
         TextSync.SyncHighscore(Scoring.Highscore.ToString());
+
         SaveData.Save();
     }
 }

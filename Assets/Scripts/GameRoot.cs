@@ -10,7 +10,7 @@ public class GameRoot : MonoBehaviour
     private static float s_environmentSpeed;
     private static float s_obstacleRateSpawn;
 
-    private static PlayerState _playerState = new Alive();
+    private static PlayerState s_playerState = new Alive();
 
     private Coroutine _spawnCoroutine;
 
@@ -43,12 +43,12 @@ public class GameRoot : MonoBehaviour
     {
         get 
         { 
-            return _playerState; 
+            return s_playerState; 
         }
         set 
         {
-            _playerState = value;
-            _playerState.OnStateChange();
+            s_playerState = value;
+            s_playerState.OnStateChange();
         }
     }
 

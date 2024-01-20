@@ -5,11 +5,11 @@ using UnityEngine.UIElements;
 
 public class ObstacleSpawner
 {
-    private List<IObstacle> obstacles;
+    private List<IObstacle> _obstacles;
 
     public ObstacleSpawner() 
     {
-        obstacles = new List<IObstacle>
+        _obstacles = new List<IObstacle>
         {
             new VerticalBottomObstacle(),
             new HorizontalObstacle(),
@@ -19,6 +19,6 @@ public class ObstacleSpawner
 
     public void Spawn()
     {
-        obstacles[Random.Range(0, obstacles.Count)].Spawn();
+        _obstacles[Random.Range(0, _obstacles.Count)].Spawn();
     }
 }
