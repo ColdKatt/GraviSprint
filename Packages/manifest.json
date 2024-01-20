@@ -1,5 +1,8 @@
 {
   "dependencies": {
+    "com.onesignal.unity.android": "5.0.5",
+    "com.onesignal.unity.core": "5.0.5",
+    "com.onesignal.unity.ios": "5.0.5",
     "com.unity.collab-proxy": "2.0.4",
     "com.unity.feature.2d": "1.0.0",
     "com.unity.feature.development": "1.0.1",
@@ -40,5 +43,14 @@
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
     "com.unity.modules.xr": "1.0.0"
-  }
+  },
+  "scopedRegistries": [
+    {
+      "name": "npmjs",
+      "url": "https://registry.npmjs.org",
+      "scopes": [
+        "com.onesignal"
+      ]
+    }
+  ]
 }
