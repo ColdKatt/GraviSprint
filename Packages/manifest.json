@@ -1,17 +1,15 @@
 {
   "dependencies": {
-    "com.onesignal.unity.android": "5.0.5",
-    "com.onesignal.unity.core": "5.0.5",
-    "com.onesignal.unity.ios": "5.0.5",
-    "com.unity.collab-proxy": "2.0.4",
-    "com.unity.feature.2d": "1.0.0",
-    "com.unity.feature.development": "1.0.1",
-    "com.unity.inputsystem": "1.5.1",
-    "com.unity.textmeshpro": "3.0.6",
-    "com.unity.timeline": "1.7.4",
+    "com.unity.collab-proxy": "2.2.0",
+    "com.unity.feature.2d": "2.0.0",
+    "com.unity.feature.development": "1.0.2",
+    "com.unity.inputsystem": "1.7.0",
+    "com.unity.mobile.android-logcat": "1.4.3",
+    "com.unity.timeline": "1.8.6",
     "com.unity.toolchain.win-x86_64-linux-x86_64": "2.0.6",
-    "com.unity.ugui": "1.0.0",
+    "com.unity.ugui": "2.0.0",
     "com.unity.visualscripting": "1.8.0",
+    "com.unity.modules.accessibility": "1.0.0",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.androidjni": "1.0.0",
     "com.unity.modules.animation": "1.0.0",
@@ -44,13 +42,5 @@
     "com.unity.modules.wind": "1.0.0",
     "com.unity.modules.xr": "1.0.0"
   },
-  "scopedRegistries": [
-    {
-      "name": "npmjs",
-      "url": "https://registry.npmjs.org",
-      "scopes": [
-        "com.onesignal"
-      ]
-    }
-  ]
+  "scopedRegistries": []
 }

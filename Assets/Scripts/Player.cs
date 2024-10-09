@@ -1,18 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] private Animator _windowAnim;
-    [SerializeField] private Animator _playerAnim;
-    private Vector2 _roofDirection = Vector2.up;
+    public event Action OnObstacleHit;
 
-    public void Teleport()
+    public void ChangeGravity()
     {
-        Reverse();
         LaunchRay();
+        Reverse();
     }
 
     private void Reverse()
@@ -22,32 +18,14 @@ public class Player : MonoBehaviour
 
     private void LaunchRay()
     {
-        var hit = Physics2D.Raycast((Vector2)transform.position + _roofDirection, _roofDirection);
-
-        if (hit.collider)
+        if (Physics.Raycast(transform.position, transform.up * 20, out RaycastHit hit))
         {
             transform.position = new Vector3(hit.point.x, hit.point.y, transform.position.z);
-            _roofDirection = _roofDirection == Vector2.up ? Vector2.down : Vector2.up;
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.collider.TryGetComponent(out ObstacleMove o))
-        {
-            GameRoot.PlayerState.ChangeState(new Dead());
-        }
-
-        if (GameRoot.PlayerState is Alive) return;
-
-        _windowAnim.SetBool("IsDead", true);
-        _playerAnim.SetBool("IsDead", true);
-
-        SoundManager.SoundHit();
-
-        TextSync.SyncCurrent(Scoring.Score.ToString());
-        TextSync.SyncHighscore(Scoring.Highscore.ToString());
-
-        SaveData.Save();
+        OnObstacleHit?.Invoke();
     }
 }

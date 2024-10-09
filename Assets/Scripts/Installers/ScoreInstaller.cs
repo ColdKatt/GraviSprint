@@ -4,24 +4,36 @@ using Zenject;
 
 public class ScoreInstaller : MonoInstaller
 {
+    [Header("View")]
     [SerializeField] private TMP_Text _scoreText;
 
-    [Header("Sync")]
-    [SerializeField] private TMP_Text _currentScoreText;
-    [SerializeField] private TMP_Text _highscoreText;
+    [SerializeField] private Animator _endWindowAnimator;
+    [SerializeField] private EndWindowData _endWindowData;
 
     public override void InstallBindings()
     {
-        Container.Bind<TMP_Text>().FromInstance(_scoreText);
-        Container.Bind<ITickable>().To<Scoring>().AsSingle().NonLazy();
-
-        InstallSyncTextScore();
+        InstallModels();
+        InstallViews();
+        InstallPresenters();
     }
 
-    private void InstallSyncTextScore()
+    private void InstallViews()
     {
-        Container.Bind<TMP_Text>().WithId("Current").FromInstance(_currentScoreText);
-        Container.Bind<TMP_Text>().WithId("Highscore").FromInstance(_highscoreText);
-        Container.Bind<TextSync>().AsSingle().NonLazy();
+        Container.Bind<ScoreView>().AsSingle().WithArguments(_scoreText).NonLazy();
+
+        Container.Bind<EndWindowData>().FromInstance(_endWindowData).AsSingle();
+        Container.Bind<EndWindowView>().AsSingle().WithArguments(_endWindowAnimator).NonLazy();
+    }
+
+    private void InstallModels()
+    {
+        Container.BindInterfacesAndSelfTo<ScoreModel>().AsSingle().NonLazy();
+        Container.BindInterfacesAndSelfTo<EndWindowModel>().AsSingle();
+    }
+
+    private void InstallPresenters()
+    {
+        Container.BindInterfacesAndSelfTo<ScorePresenter>().AsSingle().NonLazy();
+        Container.BindInterfacesAndSelfTo<EndWindowPresenter>().AsSingle().NonLazy();
     }
 }
