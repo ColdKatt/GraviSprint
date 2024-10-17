@@ -1,23 +1,36 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class SoundManager
 {
     private SoundHandler.Factory _soundFactory;
 
-    private IReadOnlyDictionary<SoundType, AudioClip> _clipsDictionary;
+    private IReadOnlyDictionary<SoundType, Sound> _soundsDictionary;
+    private Dictionary<SoundType, SoundHandler> _createdSoundsDictionary;
 
-    public SoundManager(IReadOnlyDictionary<SoundType, AudioClip> clipsDictionary, SoundHandler.Factory soundFactory)
+    public SoundManager(IReadOnlyDictionary<SoundType, Sound> soundsDictionary, SoundHandler.Factory soundFactory, SoundSettings soundSettings)
     {
-        _clipsDictionary ??= clipsDictionary;
+        _soundsDictionary ??= soundsDictionary;
         _soundFactory = soundFactory;
+
+        _createdSoundsDictionary ??= new();
     }
 
     public SoundHandler CreateSound(SoundType soundType)
     {
-        var clip = _clipsDictionary[soundType];
-        var soundHandler = _soundFactory.Create(clip);
+        var sound = _soundsDictionary[soundType];
 
-        return soundHandler;
+        if (sound.IsMultiply || !_createdSoundsDictionary.ContainsKey(soundType))
+        {
+            var soundHandler = _soundFactory.Create(sound);
+            _createdSoundsDictionary.Add(soundType, soundHandler);
+            soundHandler.OnSoundEnd += () => _createdSoundsDictionary.Remove(soundType);
+
+            return soundHandler;
+        }
+
+        return null;
     }
 }

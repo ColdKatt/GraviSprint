@@ -14,14 +14,19 @@ public class EndWindowModel : IInitializable
             _currentScore = value;
             OnCurrentScoreChanged?.Invoke();
 
-            if (_currentScore > _highscore)
+            // refactoring 
+            if (_currentScore > _savedHighscore.Value)
             {
-                HighScore = _currentScore;
+                Highscore = _savedHighscore.Value = _currentScore;
+            }
+            else
+            {
+                Highscore = _savedHighscore.Value;
             }
         }
     }
 
-    public int HighScore
+    public int Highscore
     {
         get => _highscore;
         set
@@ -33,10 +38,14 @@ public class EndWindowModel : IInitializable
 
     private int _currentScore;
     private int _highscore;
+    private SavableVariable<int> _savedHighscore;
 
     public void Initialize()
     {
+        _savedHighscore ??= new("highscore", loadImmediately: true);
+
+        OnHighscoreChanged?.Invoke();
+
         _currentScore = 0;
-        _highscore = 0; // SaveData.Load()
     }
 }

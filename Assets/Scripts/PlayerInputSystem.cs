@@ -31,8 +31,6 @@ public class PlayerInputSystem : IInitializable, IDisposable
         _input.Touch.Teleport.started += _ => _player.ChangeGravity();
 
         SetEnable(true);
-
-        Debug.Log("Init");
     }
 
     // ??? How is it works ???
@@ -41,7 +39,5 @@ public class PlayerInputSystem : IInitializable, IDisposable
         _input.Touch.Teleport.started -= _ => _player.ChangeGravity();
 
         SetEnable(false);
-
-        Debug.Log("Disposed");
     }
 }

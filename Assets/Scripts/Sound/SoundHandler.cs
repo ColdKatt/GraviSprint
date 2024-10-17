@@ -1,9 +1,13 @@
+using System;
+using System.Linq;
 using UnityEngine;
 using Zenject;
 
 [RequireComponent(typeof(AudioSource))]
 public class SoundHandler : MonoBehaviour
 {
+    public event Action OnSoundEnd;
+
     public AudioSource AudioSource { get => _audioSource; }
 
     public AudioClip Clip
@@ -23,14 +27,6 @@ public class SoundHandler : MonoBehaviour
 
     private float _lifeTime;
     private bool _isPlayOnce;
-
-    [Inject]
-    private void Construct(AudioClip clip)
-    {
-        _audioSource = GetComponent<AudioSource>();
-
-        Clip = clip;
-    }
 
     public void PlayOnce()
     {
@@ -69,5 +65,19 @@ public class SoundHandler : MonoBehaviour
         }
     }
 
-    public class Factory : PlaceholderFactory<AudioClip, SoundHandler> { }
+    private void OnDestroy()
+    {
+        OnSoundEnd?.Invoke();
+    }
+
+    [Inject]
+    private void Construct(Sound sound)
+    {
+        _audioSource = GetComponent<AudioSource>();
+
+        Clip = sound.Clip;
+        _audioSource.outputAudioMixerGroup = sound.AudioMixer;
+    }
+
+    public class Factory : PlaceholderFactory<Sound, SoundHandler> { }
 }

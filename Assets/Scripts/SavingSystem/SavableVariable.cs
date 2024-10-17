@@ -1,11 +1,8 @@
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using UnityEngine;
+using Newtonsoft.Json;
 
-[System.Serializable]
-public class SavableVariable<I, T>
+public class SavableVariable<T>
 {
-    public I Id { get => _id; }
+    public string Id { get => _id; }
 
     public T Value
     {
@@ -23,16 +20,20 @@ public class SavableVariable<I, T>
 
     public bool IsValueChangeSavingEnable;
 
-    private I _id;
+    private string _id;
+
     private T _value;
 
+    private string _json;
 
-    public SavableVariable(I id, T value = default, bool loadImmediately = false, bool isValueChangeSavingEnable = true)
+    public SavableVariable(string id, T value = default, bool loadImmediately = false, bool isValueChangeSavingEnable = true)
     {
         _id = id;
         _value = value;
 
         IsValueChangeSavingEnable = isValueChangeSavingEnable;
+
+        _json = JsonHandler.GetJsonById(Id);
 
         if (loadImmediately)
         {
@@ -42,32 +43,23 @@ public class SavableVariable<I, T>
 
     public void Save()
     {
-        var json = JsonUtility.ToJson(this);
-        Debug.Log(json);
-        //BinaryFormatter formatter = new BinaryFormatter();
-        //FileStream fileStream = File.Create(Application.persistentDataPath + "save.dat");
-        //formatter.Serialize(fileStream, this);
-        //fileStream.Close();
+        var serializeSettings = new JsonSerializerSettings
+        {
+            ContractResolver = new ExcludeObsoletePropertiesResolver(),
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+        };
+
+        _json = JsonConvert.SerializeObject(_value, serializeSettings);
+
+        JsonHandler.SetJsonValueById(Id, _json);
     }
 
-    public void Load()
+    public T Load()
     {
-        //if (!File.Exists(Application.persistentDataPath + "save.dat")) return;
+        if (string.IsNullOrEmpty(_json)) return _value;
 
-        //BinaryFormatter formatter = new BinaryFormatter();
-        //FileStream fileStream = File.Open(Application.persistentDataPath + "save.dat", FileMode.Open);
+        _value = JsonConvert.DeserializeObject<T>(_json);
 
-        //if (fileStream.Length == 0)
-        //{
-        //    fileStream.Close();
-        //    return;
-        //}
-
-        //var sav = (SavableVariable<I, T>)formatter.Deserialize(fileStream);
-
-        //_id = sav.Id;
-        //_value = sav.Value;
-
-        //fileStream.Close();
+        return _value;
     }
 }

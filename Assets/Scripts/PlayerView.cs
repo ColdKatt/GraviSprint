@@ -18,7 +18,7 @@ public class PlayerView
 
     public void SetDeathSound()
     {
-        _soundManager.CreateSound(SoundType.HIT_1)
+        _soundManager.CreateSound(SoundType.HIT_1)?
                      .PlayOnce();
     }
 }

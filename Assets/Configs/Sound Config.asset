@@ -13,6 +13,13 @@ MonoBehaviour:
   m_Name: Sound Config
   m_EditorClassIdentifier: 
   _soundPrefab: {fileID: 5052887618854636271, guid: 5fdcfba8756896d4cac67eb0dc0af8a8, type: 3}
+  _mainAudioMixer: {fileID: 24100000, guid: 943a600e4b3a1ae4aa687657b4a34077, type: 2}
   _sounds:
-  - Type: 100
+  - Type: 101
     Clip: {fileID: 8300000, guid: 88c063f4a4ab21549ad6cd73730b0d49, type: 3}
+    AudioMixer: {fileID: 5328403770990788516, guid: 943a600e4b3a1ae4aa687657b4a34077, type: 2}
+    IsMultiply: 0
+  - Type: 1
+    Clip: {fileID: 8300000, guid: 231ddd5b4df6dba4c9f56808a0dcc37b, type: 3}
+    AudioMixer: {fileID: 7950105066662290061, guid: 943a600e4b3a1ae4aa687657b4a34077, type: 2}
+    IsMultiply: 0

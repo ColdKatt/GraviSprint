@@ -7,6 +7,8 @@ public class ScoreModel : IInitializable, ITickable
     public event Action OnContingEnd;
     public event Action OnScoreChanged;
 
+    public bool IsCounting { get => _isCounting; }
+
     public int Score
     {
         get => _score;
@@ -24,27 +26,17 @@ public class ScoreModel : IInitializable, ITickable
         }
     }
 
-    public int Highscore { get => _highscore.Value; }
-
     private int _score;
-    private SavableVariable<string, int> _highscore;
-    private SavableVariable<string, int> _lastScore;
 
     private float _timelife;
 
-    private int _multiplier = 10;
+    private int _multiplier = 23;
 
     private bool _isCounting;
 
     public void Initialize()
     {
         _isCounting = true;
-
-        _highscore ??= new("highscore", loadImmediately: true);
-        _lastScore ??= new("lastscore", loadImmediately: true);
-
-        Debug.Log($"H: {Highscore} {_highscore.Id}");
-        Debug.Log($"L: {_lastScore.Value}");
     }
 
     public void Tick()
@@ -59,16 +51,6 @@ public class ScoreModel : IInitializable, ITickable
     {
         _isCounting = false;
         OnContingEnd?.Invoke();
-    }
-
-    public void Save()
-    {
-        if (Highscore < _score)
-        {
-            _highscore.Value = _score;
-        }
-
-        _lastScore.Value = _score;
     }
 
     private void UpdateScore()

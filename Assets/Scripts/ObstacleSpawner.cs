@@ -8,7 +8,7 @@ public class ObstacleSpawner : ITickable
         get => _spawnRate;
         private set
         {
-            _spawnRate = Mathf.Clamp(value, 0.5f, 4.0f);
+            _spawnRate = Mathf.Clamp(value, _minSpawnRate, _maxSpawnRate);
         }
     }
 
@@ -17,7 +17,10 @@ public class ObstacleSpawner : ITickable
 
     private readonly ScoreModel _scoreModel;
 
-    private float _spawnRate = 4.0f;
+    private float _minSpawnRate = 0.3f;
+    private float _maxSpawnRate = 4.0f;
+
+    private float _spawnRate;
     private float _passedTime;
 
     public ObstacleSpawner(Obstacle.Factory factory, ObstacleTransformData[] obstacleDatas, ScoreModel scoreModel)
@@ -25,6 +28,8 @@ public class ObstacleSpawner : ITickable
         _obstacleFactory = factory;
         _obstacleDatas = obstacleDatas;
         _scoreModel = scoreModel;
+
+        _spawnRate = _maxSpawnRate;
     }
 
     public void Spawn()
@@ -36,6 +41,8 @@ public class ObstacleSpawner : ITickable
 
     public void Tick()
     {
+        if (!_scoreModel.IsCounting) return;
+
         if (_passedTime > _spawnRate)
         {
             Spawn();
@@ -46,6 +53,6 @@ public class ObstacleSpawner : ITickable
             _passedTime += Time.deltaTime;
         }
 
-        SpawnRate = _scoreModel.Score > 100 ? 4.0f - (3.55f * (_scoreModel.Score / 650.0f)) : 4.0f;
+        SpawnRate = _scoreModel.Score > 100 ? _maxSpawnRate - (_maxSpawnRate * (_scoreModel.Score / 1500.0f)) : _maxSpawnRate;
     }
 }

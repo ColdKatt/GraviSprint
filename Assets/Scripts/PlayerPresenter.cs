@@ -31,7 +31,6 @@ public class PlayerPresenter : IInitializable, IDisposable
         _player.OnObstacleHit -= () => _endWindowView.ShowWindow();
         _player.OnObstacleHit -= () => _input.Dispose();
         _player.OnObstacleHit -= () => _scoreModel.StopCounting();
-        _player.OnObstacleHit -= () => _scoreModel.Save();
     }
 
     public void Initialize()
@@ -42,6 +41,5 @@ public class PlayerPresenter : IInitializable, IDisposable
         _player.OnObstacleHit += () => _endWindowView.ShowWindow();
         _player.OnObstacleHit += () => _input.Dispose();
         _player.OnObstacleHit += () => _scoreModel.StopCounting();
-        _player.OnObstacleHit += () => _scoreModel.Save();
     }
 }

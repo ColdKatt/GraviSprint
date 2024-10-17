@@ -3,13 +3,29 @@ using Zenject;
 
 public class EnvironmentMovement : IInitializable, ITickable
 {
-    public float EnvironmentSpeed { get => _environmentSpeed; }
+    public float EnvironmentSpeed 
+    {
+        get => _environmentSpeed; 
+        private set
+        {
+            if (_isMovementStop)
+            {
+                _environmentSpeed = 0;
+            }
+            else
+            {
+                _environmentSpeed = Mathf.Clamp(value, _minEnvironmentSpeed, _maxEnvironmentSpeed);
+            }
+        }
+    }
 
     private readonly ScoreModel _scoreModel;
 
     private Material _bgTopMaterial;
     private Material _bgBottomMaterial;
 
+    private float _minEnvironmentSpeed = 1.0f;
+    private float _maxEnvironmentSpeed = 15.0f;
     private float _environmentSpeed;
 
     private bool _isMovementStop;
@@ -31,7 +47,7 @@ public class EnvironmentMovement : IInitializable, ITickable
         _bgTopMaterial.mainTextureOffset = Vector2.zero;
         _bgBottomMaterial.mainTextureOffset = Vector2.zero;
 
-        _environmentSpeed = 0.1f;
+        _environmentSpeed = 1f;
     }
 
     public void Tick()
@@ -39,6 +55,6 @@ public class EnvironmentMovement : IInitializable, ITickable
         _bgTopMaterial.mainTextureOffset += Vector2.left * _environmentSpeed * Time.deltaTime / 8.0f;
         _bgBottomMaterial.mainTextureOffset += Vector2.right * _environmentSpeed * Time.deltaTime / 8.0f;
 
-        _environmentSpeed = _isMovementStop ? 0 : Mathf.Clamp(_scoreModel.Score / 200.0f, 0.0f, 100.0f);
+        EnvironmentSpeed = _scoreModel.Score / 100.0f;
     }
 }
